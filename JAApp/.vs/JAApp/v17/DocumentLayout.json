@@ -1,0 +1,110 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{37C0BC50-D7F6-4975-8C17-923F4AB4C3FA}|JAApp\\JAApp.csproj|c:\\users\\kjaku\\desktop\\s5\\ja\\jaapp\\jaapp\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37C0BC50-D7F6-4975-8C17-923F4AB4C3FA}|JAApp\\JAApp.csproj|solutionrelative:jaapp\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37C0BC50-D7F6-4975-8C17-923F4AB4C3FA}|JAApp\\JAApp.csproj|c:\\users\\kjaku\\desktop\\s5\\ja\\jaapp\\jaapp\\mainwindow.xaml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{37C0BC50-D7F6-4975-8C17-923F4AB4C3FA}|JAApp\\JAApp.csproj|solutionrelative:jaapp\\mainwindow.xaml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{37C0BC50-D7F6-4975-8C17-923F4AB4C3FA}|JAApp\\JAApp.csproj|c:\\users\\kjaku\\desktop\\s5\\ja\\jaapp\\jaapp\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{37C0BC50-D7F6-4975-8C17-923F4AB4C3FA}|JAApp\\JAApp.csproj|solutionrelative:jaapp\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6983075E-D692-472B-B601-9247BFCB282E}|JADll\\JADll.vcxproj|C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JADll\\mydll.def||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{6983075E-D692-472B-B601-9247BFCB282E}|JADll\\JADll.vcxproj|solutionrelative:JADll\\mydll.def||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6983075E-D692-472B-B601-9247BFCB282E}|JADll\\JADll.vcxproj|C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JADll\\mydll.asm||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{6983075E-D692-472B-B601-9247BFCB282E}|JADll\\JADll.vcxproj|solutionrelative:JADll\\mydll.asm||{8B382828-6202-11D1-8870-0000F87579D2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 241,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "mydll.asm",
+              "DocumentMoniker": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JADll\\mydll.asm",
+              "RelativeDocumentMoniker": "JADll\\mydll.asm",
+              "ToolTip": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JADll\\mydll.asm",
+              "RelativeToolTip": "JADll\\mydll.asm",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2024-10-28T11:22:47.696Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "mydll.def",
+              "DocumentMoniker": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JADll\\mydll.def",
+              "RelativeDocumentMoniker": "JADll\\mydll.def",
+              "ToolTip": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JADll\\mydll.def",
+              "RelativeToolTip": "JADll\\mydll.def",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001913|",
+              "WhenOpened": "2024-10-28T11:22:10.438Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JAApp\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "JAApp\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JAApp\\MainWindow.xaml",
+              "RelativeToolTip": "JAApp\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-10-28T11:19:17.227Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JAApp\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "JAApp\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JAApp\\MainWindow.xaml.cs",
+              "RelativeToolTip": "JAApp\\MainWindow.xaml.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAAwB4AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-28T11:19:15.463Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedHeight": 159,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JAApp\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "JAApp\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JAApp\\MainWindow.xaml",
+              "RelativeToolTip": "JAApp\\MainWindow.xaml",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAcwAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-10-28T11:32:52.971Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
