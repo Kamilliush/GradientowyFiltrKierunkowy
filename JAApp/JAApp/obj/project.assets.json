@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JAApp\\JAApp.csproj",
+      "projectUniqueName": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JAApp\\JAApp.csproj",
       "projectName": "JAApp",
-      "projectPath": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JAApp\\JAApp.csproj",
+      "projectPath": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JAApp\\JAApp.csproj",
       "packagesPath": "C:\\Users\\kjaku\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\JAApp\\JAApp\\obj\\",
+      "outputPath": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JAApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\kjaku\\AppData\\Roaming\\NuGet\\NuGet.Config",
