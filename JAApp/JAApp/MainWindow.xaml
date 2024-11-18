@@ -84,10 +84,10 @@
             <!-- Czerwony: Przycisk -->
             <Button Grid.Column="1"
             Grid.Row="0"
-            Content="Kliknij mnie"
+            Content="Start"
             VerticalAlignment="Stretch"
             HorizontalAlignment="Stretch"
-            
+            Click="Click"
             FontSize="20" />
 
             <!-- Niebieski: RadioButtony (po lewej stronie) -->
@@ -96,23 +96,26 @@
                 VerticalAlignment="Center"
                 HorizontalAlignment="Left"
                 Orientation="Vertical">
-                <RadioButton Content="Opcja 1"
+                <RadioButton x:Name="CPP"
+                    Content="CPP"
                      GroupName="Opcje" />
-                <RadioButton Content="Opcja 2"
+                <RadioButton x:Name="ASM"
+                    Content="ASM"
                      GroupName="Opcje" />
             </StackPanel>
 
             <!-- Zielony: Dropdown (ComboBox) z wstępną opcją -->
-            <ComboBox Grid.Column="3"
-              Grid.Row="0"
-              VerticalAlignment="Center"
-              HorizontalAlignment="Center"
-              Width="150"
-              SelectedIndex="0">
+            <ComboBox x:Name="threadsNum"
+                      Grid.Column="3"
+                      Grid.Row="0"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      Width="150"
+                      SelectedIndex="0">
                 <!-- Wstępnie zaznaczona opcja -->
-                <ComboBoxItem Content="Opcja A" />
-                <ComboBoxItem Content="Opcja B" />
-                <ComboBoxItem Content="Opcja C" />
+                <ComboBoxItem Content="1" />
+                <ComboBoxItem Content="2" />
+                <ComboBoxItem Content="128" />
             </ComboBox>
 
 

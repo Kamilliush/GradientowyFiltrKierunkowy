@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
+using System.Reflection.Metadata;
 
 
 namespace JAApp
@@ -21,22 +22,106 @@ namespace JAApp
     public partial class MainWindow : Window
     {
         [DllImport("/../../../../bin/JADll.dll", CallingConvention = CallingConvention.StdCall)]
-        public static extern int MyProc1(int a, int b);        
-        
-        [DllImport("/../../../../x64/Debug/cppDll.dll", CallingConvention = CallingConvention.StdCall)]
-        public static extern int Add(int a, int b);
+        public static extern void MyProc1(IntPtr pixelData, int width, int startY, int segmentHeight, int imageHeight);
 
-        private BitmapSource loadedBitmap;
+        [DllImport("/../../../../bin/cppDll.dll", CallingConvention = CallingConvention.StdCall)]
+
+        public static extern void Add(IntPtr pixelData, int width, int startY, int segmentHeight, int imageHeight);
+
+        private BitmapSource bitmap;
         public MainWindow()
         {
-            InitializeComponent();
+            InitializeComponent();        
+        }
+        public void Start()
+        {
+
+
+            int height = bitmap.PixelHeight;
+            int width = bitmap.PixelWidth;
+            int bytesPerPixel = 3;
+
+
+            if (threadsNum.SelectedItem is ComboBoxItem selectedItem)
+            {
+                int.TryParse(selectedItem.Content.ToString(), out int threadsNumber);
+
+
+                WriteableBitmap filteredBitmap = new WriteableBitmap(bitmap);
+
+                filteredBitmap.Lock();
+                try
+                {
+                    int length = width * height * bytesPerPixel;
+                    byte[] pixelData = new byte[length];
+                    IntPtr pBackBuffer = filteredBitmap.BackBuffer;
+                    Marshal.Copy(pBackBuffer, pixelData, 0, length);
+
+                    // Przypięcie tablicy pixelData do pamięci, by uniknąć problemów z GC
+                    GCHandle handle = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
+                    IntPtr pixelDataPtr = Marshal.UnsafeAddrOfPinnedArrayElement(pixelData, 0);
+
+                    // Obliczanie optymalnego podziału w pionie
+                    int baseSegmentHeight = height / threadsNumber;
+                    int extraRows = height % threadsNumber;
+
+                    int[] startYs = new int[threadsNumber];
+                    int[] endYs = new int[threadsNumber];
+
+                    // Obliczanie start i end Y dla każdego wątku
+                    int currentStartY = 0;
+                    for (int i = 0; i < threadsNumber; i++)
+                    {
+                        int segmentHeight = baseSegmentHeight + (i < extraRows ? 1 : 0);
+                        startYs[i] = currentStartY;
+                        endYs[i] = currentStartY + segmentHeight - 1;
+                        currentStartY = endYs[i] + 1; // Kolejny segment zaczyna się od następnego wiersza
+                    }
+
+                    bool cppRadioButton = (bool)CPP.IsChecked;
+                    bool asmRadioButton = (bool)ASM.IsChecked;
+
+                    // Parallel processing of image sections
+                    Parallel.For(0, threadsNumber, i =>
+                    {
+                        int startY = startYs[i];
+                        int segmentHeight = endYs[i] - startY + 1;
+
+
+
+                        if (cppRadioButton)
+                        {
+                            Add(pixelDataPtr, width, startY, segmentHeight, height);
+                        }
+                        else if (asmRadioButton)
+                        {
+                            Add(pixelDataPtr, width, startY, segmentHeight, height);
+
+                        }
+
+
+                    });
+
+                    // Kopiowanie zmodyfikowanych danych z powrotem do bitmapy
+                    Marshal.Copy(pixelData, 0, pBackBuffer, length);
+
+                    // Zwalnianie zasobów
+                    handle.Free();
+                }
+                finally
+                {
+                    filteredBitmap.Unlock();
+                }
+
+                imageAfter.Source = filteredBitmap;
+
+            }
+        }
+
+        private void Click(object sender, RoutedEventArgs e)
+        {
             
-
-            int a = 2;
-            int b = 2;
-
-            Debug.WriteLine(MyProc1(a, b));
-            Debug.WriteLine(Add(a, b));
+            if (image.Source != null) { Start(); }
         }
         private void ImageDragEnter(object sender, DragEventArgs e)
         {
@@ -84,9 +169,9 @@ namespace JAApp
                 bitmapImage.EndInit();
 
                 FormatConvertedBitmap rgbBitmap = new FormatConvertedBitmap(bitmapImage, PixelFormats.Rgb24, null, 0);
-                loadedBitmap = rgbBitmap;
+                bitmap = rgbBitmap;
 
-                image.Source = loadedBitmap;
+                image.Source = bitmap;
             }
             catch (Exception ex)
             {
