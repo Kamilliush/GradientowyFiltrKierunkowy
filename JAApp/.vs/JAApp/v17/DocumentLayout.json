@@ -29,7 +29,7 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 320,
+          "DockedWidth": 215,
           "SelectedChildIndex": 1,
           "Children": [
             {
@@ -52,7 +52,7 @@
               "RelativeDocumentMoniker": "JADll\\mydll.asm",
               "ToolTip": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JADll\\mydll.asm",
               "RelativeToolTip": "JADll\\mydll.asm",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAO0AAAAAAAAAAAAAAO0AAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-01-04T13:21:05.746Z",
               "EditorCaption": ""
@@ -67,8 +67,7 @@
               "RelativeToolTip": "cppDll\\gradient.cpp",
               "ViewState": "AgIAACQAAAAAAAAAAAAmwEUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-18T21:12:26.334Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-11-18T21:12:26.334Z"
             },
             {
               "$type": "Document",
@@ -80,13 +79,12 @@
               "RelativeToolTip": "JADll\\mydll.def",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001913|",
-              "WhenOpened": "2024-10-28T11:22:10.438Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-28T11:22:10.438Z"
             }
           ]
         },
         {
-          "DockedWidth": 80,
+          "DockedWidth": 185,
           "SelectedChildIndex": 0,
           "Children": [
             {
@@ -97,7 +95,7 @@
               "RelativeDocumentMoniker": "JAApp\\MainWindow.xaml.cs",
               "ToolTip": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JAApp\\MainWindow.xaml.cs",
               "RelativeToolTip": "JAApp\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAALYAAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAlwGUAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-28T11:19:15.463Z",
               "EditorCaption": ""
