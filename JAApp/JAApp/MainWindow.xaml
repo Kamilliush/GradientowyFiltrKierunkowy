@@ -10,6 +10,7 @@
     <Grid AllowDrop="True"
           Drop="ImageDrop"
           DragEnter="ImageDragEnter">
+        
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -29,7 +30,12 @@
             <RowDefinition Height="2*"/>
 
         </Grid.RowDefinitions>
-
+        <TextBlock x:Name="SegmentsTextBlock"
+       TextWrapping="Wrap"
+       Margin="10"
+       Foreground="Blue"
+       Grid.Column="1"
+       Grid.Row="3"/>
         <Border Grid.Column="1" 
                 Grid.Row="1" 
                 VerticalAlignment="Stretch"
@@ -114,7 +120,7 @@
                       SelectedIndex="0">
                 <!-- Wstępnie zaznaczona opcja -->
                 <ComboBoxItem Content="1" />
-                <ComboBoxItem Content="2" />
+                <ComboBoxItem Content="12" />
                 <ComboBoxItem Content="128" />
             </ComboBox>
 

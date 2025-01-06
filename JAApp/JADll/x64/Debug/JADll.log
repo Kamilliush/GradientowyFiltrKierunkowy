@@ -1,4 +1,4 @@
-﻿  LINK : nie znaleziono elementu C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\\bin\JADll.dll ani nie został on skompilowany podczas ostatniego konsolidowania przyrostowego; zostanie wykonana pełna konsolidacja
+﻿  Assembling mydll.asm...
      Trwa tworzenie biblioteki C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\\bin\JADll.lib i obiektu C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\\bin\JADll.exp
-JADll.exp : warning LNK4070: /OUT: dyrektywa JAAsm.dll w pliku .EXP jest inna niż nazwa pliku wyjściowego „C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\\bin\JADll.dll”; dyrektywa została zignorowana
+JADll.exp : warning LNK4070: /OUT: dyrektywa JAAsm.dll w pliku .EXP jest inna niż nazwa pliku wyjściowego "C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\\bin\JADll.dll"; dyrektywa została zignorowana
   JADll.vcxproj -> C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\bin\JADll.dll

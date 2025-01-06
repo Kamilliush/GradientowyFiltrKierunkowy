@@ -3,49 +3,40 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
 using System.Reflection.Metadata;
-
+using System.Threading.Tasks;
 
 namespace JAApp
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        // Sygnatury funkcji DLL:
         [DllImport("/../../../../bin/JADll.dll", CallingConvention = CallingConvention.StdCall)]
-        public static extern void MyProc1(IntPtr pixelData, int width, int startY, int segmentHeight, int imageHeight);
+        public static extern void alg(IntPtr pixelData, IntPtr outputData, int width, int startY, int endY, int imageHeight);
 
         [DllImport("/../../../../bin/cppDll.dll", CallingConvention = CallingConvention.StdCall)]
-
-        public static extern void Add(IntPtr pixelData, int width, int startY, int segmentHeight, int imageHeight);
+        public static extern void Add(IntPtr pixelData, IntPtr outputData, int width, int startY, int endY, int imageHeight);
 
         private BitmapSource bitmap;
+
         public MainWindow()
         {
-            InitializeComponent();        
+            InitializeComponent();
         }
+
         public void Start()
         {
-
-
             int height = bitmap.PixelHeight;
             int width = bitmap.PixelWidth;
             int bytesPerPixel = 3;
 
-
             if (threadsNum.SelectedItem is ComboBoxItem selectedItem)
             {
-                int.TryParse(selectedItem.Content.ToString(), out int threadsNumber);
-
+                if (!int.TryParse(selectedItem.Content.ToString(), out int threadsNumber))
+                    return;
 
                 WriteableBitmap filteredBitmap = new WriteableBitmap(bitmap);
 
@@ -54,29 +45,46 @@ namespace JAApp
                 {
                     int length = width * height * bytesPerPixel;
                     byte[] pixelData = new byte[length];
+                    byte[] outputData = new byte[length]; // Bufor wyjściowy
+
                     IntPtr pBackBuffer = filteredBitmap.BackBuffer;
                     Marshal.Copy(pBackBuffer, pixelData, 0, length);
 
-                    // Przypięcie tablicy pixelData do pamięci, by uniknąć problemów z GC
-                    GCHandle handle = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
+                    // Przypięcie tablic do pamięci, by uniknąć problemów z GC
+                    GCHandle handleInput = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
+                    GCHandle handleOutput = GCHandle.Alloc(outputData, GCHandleType.Pinned);
                     IntPtr pixelDataPtr = Marshal.UnsafeAddrOfPinnedArrayElement(pixelData, 0);
+                    IntPtr outputDataPtr = Marshal.UnsafeAddrOfPinnedArrayElement(outputData, 0);
 
-                    // Obliczanie optymalnego podziału w pionie
+                    // Obliczanie podziału na startY i endY
                     int baseSegmentHeight = height / threadsNumber;
                     int extraRows = height % threadsNumber;
 
                     int[] startYs = new int[threadsNumber];
                     int[] endYs = new int[threadsNumber];
 
-                    // Obliczanie start i end Y dla każdego wątku
                     int currentStartY = 0;
                     for (int i = 0; i < threadsNumber; i++)
                     {
                         int segmentHeight = baseSegmentHeight + (i < extraRows ? 1 : 0);
+                        // endY = ostatni wiersz w tym segmencie (inclusive)
+                        int currentEndY = currentStartY + segmentHeight - 1;
+
                         startYs[i] = currentStartY;
-                        endYs[i] = currentStartY + segmentHeight - 1;
-                        currentStartY = endYs[i] + 1; // Kolejny segment zaczyna się od następnego wiersza
+                        endYs[i] = currentEndY;
+
+                        currentStartY = currentEndY + 1;
                     }
+
+                    // Tu dopisujemy wyświetlenie segmentów w GUI:
+                    StringBuilder sb = new StringBuilder();
+                    for (int i = 0; i < threadsNumber; i++)
+                    {
+                        sb.AppendLine(
+                            $"Segment {i}: startY = {startYs[i]}, endY = {endYs[i]}"
+                        );
+                    }
+                    SegmentsTextBlock.Text = sb.ToString(); // <-- Wyświetlamy w interfejsie
 
                     bool cppRadioButton = (bool)CPP.IsChecked;
                     bool asmRadioButton = (bool)ASM.IsChecked;
@@ -85,44 +93,43 @@ namespace JAApp
                     Parallel.For(0, threadsNumber, i =>
                     {
                         int startY = startYs[i];
-                        int segmentHeight = endYs[i] - startY + 1;
-
-
+                        int endY = endYs[i];
 
                         if (cppRadioButton)
-                        {
-                            Add(pixelDataPtr, width, startY, segmentHeight, height);
-                        }
+                            Add(pixelDataPtr, outputDataPtr, width, startY, endY, height);
                         else if (asmRadioButton)
-                        {
-                            Add(pixelDataPtr, width, startY, segmentHeight, height);
-
-                        }
-
-
+                            alg(pixelDataPtr, outputDataPtr, width, startY, endY, height);
                     });
 
-                    // Kopiowanie zmodyfikowanych danych z powrotem do bitmapy
-                    Marshal.Copy(pixelData, 0, pBackBuffer, length);
+                    // Utwórz nową bitmapę z bufora wyjściowego
+                    WriteableBitmap outputBitmap = new WriteableBitmap(width, height, bitmap.DpiX, bitmap.DpiY, PixelFormats.Rgb24, null);
+                    outputBitmap.Lock();
+                    Marshal.Copy(outputData, 0, outputBitmap.BackBuffer, length);
+                    outputBitmap.AddDirtyRect(new Int32Rect(0, 0, width, height));
+                    outputBitmap.Unlock();
+
+                    // Przypisz nową bitmapę jako wynik
+                    imageAfter.Source = outputBitmap;
 
                     // Zwalnianie zasobów
-                    handle.Free();
+                    handleInput.Free();
+                    handleOutput.Free();
                 }
                 finally
                 {
                     filteredBitmap.Unlock();
                 }
-
-                imageAfter.Source = filteredBitmap;
-
             }
         }
 
         private void Click(object sender, RoutedEventArgs e)
         {
-            
-            if (image.Source != null) { Start(); }
+            if (image.Source != null)
+            {
+                Start();
+            }
         }
+
         private void ImageDragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -158,6 +165,7 @@ namespace JAApp
                 }
             }
         }
+
         private void SetImage(string filePath)
         {
             try
