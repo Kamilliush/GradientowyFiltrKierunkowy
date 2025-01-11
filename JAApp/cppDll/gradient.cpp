@@ -1,69 +1,91 @@
 #include "pch.h"
 
+#include <algorithm> // std::clamp
+
 extern "C" __declspec(dllexport) void Add(
-    unsigned char* pixelData,
-    unsigned char* outputDataPtr,
+    unsigned char* pixelData,      // wejœcie
+    unsigned char* outputData,     // wyjœcie
     int width,
     int startY,
     int endY,
     int imageHeight
 )
 {
-    // Iterujemy do min(endY, imageHeight - 2), bo y+1 musi byæ < imageHeight
+    // Maska 3x3:
+    //   -1  -1   1
+    //   -1  -2   1
+    //    1   1   1
+    //
+    // Dla piksela (x, y) liczymy sumê (R, G, B) z uwzglêdnieniem wag s¹siadów.
+    // Jeœli piksel jest na brzegu (x == 0 || x == width - 1 || y == 0 || y == imageHeight - 1),
+    // kopiujemy oryginaln¹ wartoœæ.
+
+    // Ka¿dy piksel = 3 bajty (R, G, B).
+    // Indeks piksela:  index = (y * width + x) * 3
+
     for (int y = startY; y <= endY && y < imageHeight; ++y)
     {
         for (int x = 0; x < width; ++x)
         {
+            // Sprawdzenie brzegów
+            bool isBorder = (x == 0 || x == width - 1 || y == 0 || y == imageHeight - 1);
             int index = (y * width + x) * 3;
 
-            // Piksel centralny (R, G, B)
-            unsigned char r = pixelData[index];
-            unsigned char g = pixelData[index + 1];
-            unsigned char b = pixelData[index + 2];
-
-            // S¹siedzi inicjowani wartoœci¹ piksela centralnego
-            unsigned char r_south = r, g_south = g, b_south = b;
-            unsigned char r_east = r, g_east = g, b_east = b;
-            unsigned char r_southeast = r, g_southeast = g, b_southeast = b;
-
-            // Dolny s¹siad: y+1 (wiemy, ¿e y < imageHeight - 1, wiêc bezpiecznie pobieramy)
+            if (isBorder)
             {
-                int southIndex = ((y + 1) * width + x) * 3;
-                r_south = pixelData[southIndex];
-                g_south = pixelData[southIndex + 1];
-                b_south = pixelData[southIndex + 2];
-            }
-            // Prawy s¹siad: x+1 (trzeba sprawdziæ, czy x+1 < width)
-            if (x + 1 < width)
-            {
-                int eastIndex = (y * width + (x + 1)) * 3;
-                r_east = pixelData[eastIndex];
-                g_east = pixelData[eastIndex + 1];
-                b_east = pixelData[eastIndex + 2];
-            }
-            // Dolno-prawy s¹siad: (y+1, x+1) (trzeba sprawdziæ, czy x+1 < width)
-            if (x + 1 < width)
-            {
-                int southeastIndex = ((y + 1) * width + (x + 1)) * 3;
-                r_southeast = pixelData[southeastIndex];
-                g_southeast = pixelData[southeastIndex + 1];
-                b_southeast = pixelData[southeastIndex + 2];
+                // Kopiujemy piksel oryginalny
+                outputData[index + 0] = pixelData[index + 0]; // R
+                outputData[index + 1] = pixelData[index + 1]; // G
+                outputData[index + 2] = pixelData[index + 2]; // B
+                continue;
             }
 
-            // Zastosowanie maski filtra
-            int r_new = -r_south - r_southeast + r_east + r;
-            int g_new = -g_south - g_southeast + g_east + g;
-            int b_new = -b_south - b_southeast + b_east + b;
+            // Jeœli nie jesteœmy na brzegu, obliczamy maskê 3×3.
+            // accR, accG, accB – akumulatory
+            int accR = 0, accG = 0, accB = 0;
 
-            // Ograniczenie wartoœci RGB do zakresu 0-255
-            r_new = (r_new < 0) ? 0 : (r_new > 255) ? 255 : r_new;
-            g_new = (g_new < 0) ? 0 : (g_new > 255) ? 255 : g_new;
-            b_new = (b_new < 0) ? 0 : (b_new > 255) ? 255 : b_new;
+            // Makro- / funkcja pomocnicza do pobierania 3 kana³ów i mno¿enia przez wagê
+            auto addWeightedPixel = [&](int dx, int dy, int weight)
+                {
+                    int nx = x + dx;    // neighbor x
+                    int ny = y + dy;    // neighbor y
+                    int nIndex = (ny * width + nx) * 3;
+                    accR += pixelData[nIndex + 0] * weight;
+                    accG += pixelData[nIndex + 1] * weight;
+                    accB += pixelData[nIndex + 2] * weight;
+                };
 
-            // Zapisanie zmodyfikowanego piksela do tablicy pixelData
-            outputDataPtr[index] = static_cast<unsigned char>(r_new);
-            outputDataPtr[index + 1] = static_cast<unsigned char>(g_new);
-            outputDataPtr[index + 2] = static_cast<unsigned char>(b_new);
+            // Zgodnie z mask¹ 3x3 (kolejno wierszami):
+            // (x-1, y-1) z wag¹ -1
+            addWeightedPixel(-1, -1, -1);
+            // (x,   y-1) z wag¹ -1
+            addWeightedPixel(0, -1, -1);
+            // (x+1, y-1) z wag¹  1
+            addWeightedPixel(1, -1, 1);
+
+            // (x-1, y)   z wag¹ -1
+            addWeightedPixel(-1, 0, -1);
+            // (x,   y)   z wag¹ -2
+            addWeightedPixel(0, 0, -2);
+            // (x+1, y)   z wag¹  1
+            addWeightedPixel(1, 0, 1);
+
+            // (x-1, y+1) z wag¹  1
+            addWeightedPixel(-1, 1, 1);
+            // (x,   y+1) z wag¹  1
+            addWeightedPixel(0, 1, 1);
+            // (x+1, y+1) z wag¹  1
+            addWeightedPixel(1, 1, 1);
+
+            // Teraz obcinamy wartoœci do [0..255]
+            unsigned char r = static_cast<unsigned char>(std::clamp(accR, 0, 255));
+            unsigned char g = static_cast<unsigned char>(std::clamp(accG, 0, 255));
+            unsigned char b = static_cast<unsigned char>(std::clamp(accB, 0, 255));
+
+            // Zapisujemy wynik do bufora wyjœciowego
+            outputData[index + 0] = r;
+            outputData[index + 1] = g;
+            outputData[index + 2] = b;
         }
     }
 }

@@ -3,24 +3,24 @@
   "WorkspaceRootPath": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{6983075E-D692-472B-B601-9247BFCB282E}|JADll\\JADll.vcxproj|C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JADll\\mydll.asm||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{6983075E-D692-472B-B601-9247BFCB282E}|JADll\\JADll.vcxproj|solutionrelative:JADll\\mydll.asm||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{37C0BC50-D7F6-4975-8C17-923F4AB4C3FA}|JAApp\\JAApp.csproj|c:\\users\\kjaku\\desktop\\s5\\ja\\gradientowyfiltrkierunkowy\\jaapp\\jaapp\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{37C0BC50-D7F6-4975-8C17-923F4AB4C3FA}|JAApp\\JAApp.csproj|solutionrelative:jaapp\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6983075E-D692-472B-B601-9247BFCB282E}|JADll\\JADll.vcxproj|C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JADll\\mydll.asm||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{6983075E-D692-472B-B601-9247BFCB282E}|JADll\\JADll.vcxproj|solutionrelative:JADll\\mydll.asm||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{91BFF447-F3CD-4DE7-89D7-57FFDE95C5E3}|cppDll\\cppDll.vcxproj|C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\cppDll\\gradient.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{91BFF447-F3CD-4DE7-89D7-57FFDE95C5E3}|cppDll\\cppDll.vcxproj|solutionrelative:cppDll\\gradient.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{6983075E-D692-472B-B601-9247BFCB282E}|JADll\\JADll.vcxproj|C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JADll\\mydll.def||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{6983075E-D692-472B-B601-9247BFCB282E}|JADll\\JADll.vcxproj|solutionrelative:JADll\\mydll.def||{8B382828-6202-11D1-8870-0000F87579D2}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{37C0BC50-D7F6-4975-8C17-923F4AB4C3FA}|JAApp\\JAApp.csproj|c:\\users\\kjaku\\desktop\\s5\\ja\\gradientowyfiltrkierunkowy\\jaapp\\jaapp\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{37C0BC50-D7F6-4975-8C17-923F4AB4C3FA}|JAApp\\JAApp.csproj|solutionrelative:jaapp\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{6983075E-D692-472B-B601-9247BFCB282E}|JADll\\JADll.vcxproj|C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JADll\\mydll.def||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{6983075E-D692-472B-B601-9247BFCB282E}|JADll\\JADll.vcxproj|solutionrelative:JADll\\mydll.def||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -29,12 +29,12 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 215,
+          "DockedWidth": 211,
           "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JAApp\\MainWindow.xaml",
               "RelativeDocumentMoniker": "JAApp\\MainWindow.xaml",
@@ -42,17 +42,18 @@
               "RelativeToolTip": "JAApp\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2024-12-04T12:08:57.247Z",
-              "IsPinned": true
+              "IsPinned": true,
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "mydll.asm",
               "DocumentMoniker": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JADll\\mydll.asm",
               "RelativeDocumentMoniker": "JADll\\mydll.asm",
               "ToolTip": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JADll\\mydll.asm",
               "RelativeToolTip": "JADll\\mydll.asm",
-              "ViewState": "AgIAAO8AAAAAAAAAAAAAAA0BAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAANwAAAAAAAAAAAAiwPgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
               "WhenOpened": "2025-01-04T13:21:05.746Z",
               "EditorCaption": ""
@@ -65,13 +66,14 @@
               "RelativeDocumentMoniker": "cppDll\\gradient.cpp",
               "ToolTip": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\cppDll\\gradient.cpp",
               "RelativeToolTip": "cppDll\\gradient.cpp",
-              "ViewState": "AgIAACQAAAAAAAAAAAAmwEUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAcwFsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
-              "WhenOpened": "2024-11-18T21:12:26.334Z"
+              "WhenOpened": "2024-11-18T21:12:26.334Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "mydll.def",
               "DocumentMoniker": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JADll\\mydll.def",
               "RelativeDocumentMoniker": "JADll\\mydll.def",
@@ -84,18 +86,18 @@
           ]
         },
         {
-          "DockedWidth": 185,
+          "DockedWidth": 189,
           "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JAApp\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "JAApp\\MainWindow.xaml.cs",
-              "ToolTip": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JAApp\\MainWindow.xaml.cs",
-              "RelativeToolTip": "JAApp\\MainWindow.xaml.cs",
-              "ViewState": "AgIAAKgAAAAAAAAAAAAqwMQAAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\kjaku\\Desktop\\S5\\JA\\GradientowyFiltrKierunkowy\\JAApp\\JAApp\\MainWindow.xaml.cs*",
+              "RelativeToolTip": "JAApp\\MainWindow.xaml.cs*",
+              "ViewState": "AgIAANUAAAAAAAAAAAA0wPEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-28T11:19:15.463Z",
               "EditorCaption": ""

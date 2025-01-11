@@ -6,14 +6,14 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.IO;
-using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using System.Windows.Shapes;
+using System.Linq;
 
 namespace JAApp
 {
     public partial class MainWindow : Window
     {
-        // Sygnatury funkcji DLL:
         [DllImport("/../../../../bin/JADll.dll", CallingConvention = CallingConvention.StdCall)]
         public static extern void alg(IntPtr pixelData, IntPtr outputData, int width, int startY, int endY, int imageHeight);
 
@@ -45,18 +45,16 @@ namespace JAApp
                 {
                     int length = width * height * bytesPerPixel;
                     byte[] pixelData = new byte[length];
-                    byte[] outputData = new byte[length]; // Bufor wyjściowy
+                    byte[] outputData = new byte[length];
 
                     IntPtr pBackBuffer = filteredBitmap.BackBuffer;
                     Marshal.Copy(pBackBuffer, pixelData, 0, length);
 
-                    // Przypięcie tablic do pamięci, by uniknąć problemów z GC
                     GCHandle handleInput = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
                     GCHandle handleOutput = GCHandle.Alloc(outputData, GCHandleType.Pinned);
                     IntPtr pixelDataPtr = Marshal.UnsafeAddrOfPinnedArrayElement(pixelData, 0);
                     IntPtr outputDataPtr = Marshal.UnsafeAddrOfPinnedArrayElement(outputData, 0);
 
-                    // Obliczanie podziału na startY i endY
                     int baseSegmentHeight = height / threadsNumber;
                     int extraRows = height % threadsNumber;
 
@@ -67,7 +65,6 @@ namespace JAApp
                     for (int i = 0; i < threadsNumber; i++)
                     {
                         int segmentHeight = baseSegmentHeight + (i < extraRows ? 1 : 0);
-                        // endY = ostatni wiersz w tym segmencie (inclusive)
                         int currentEndY = currentStartY + segmentHeight - 1;
 
                         startYs[i] = currentStartY;
@@ -76,20 +73,18 @@ namespace JAApp
                         currentStartY = currentEndY + 1;
                     }
 
-                    // Tu dopisujemy wyświetlenie segmentów w GUI:
                     StringBuilder sb = new StringBuilder();
                     for (int i = 0; i < threadsNumber; i++)
                     {
-                        sb.AppendLine(
-                            $"Segment {i}: startY = {startYs[i]}, endY = {endYs[i]}"
-                        );
+                        sb.AppendLine($"Segment {i}: startY = {startYs[i]}, endY = {endYs[i]}");
                     }
-                    SegmentsTextBlock.Text = sb.ToString(); // <-- Wyświetlamy w interfejsie
+                    SegmentsTextBlock.Text = sb.ToString();
 
                     bool cppRadioButton = (bool)CPP.IsChecked;
                     bool asmRadioButton = (bool)ASM.IsChecked;
 
-                    // Parallel processing of image sections
+                    Stopwatch stopwatch = Stopwatch.StartNew();
+
                     Parallel.For(0, threadsNumber, i =>
                     {
                         int startY = startYs[i];
@@ -101,17 +96,22 @@ namespace JAApp
                             alg(pixelDataPtr, outputDataPtr, width, startY, endY, height);
                     });
 
-                    // Utwórz nową bitmapę z bufora wyjściowego
+                    stopwatch.Stop();
+                    double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
+                    ExecutionTimeTextBlock.Text = $"Czas: {elapsedSeconds:F6} seconds";
+
                     WriteableBitmap outputBitmap = new WriteableBitmap(width, height, bitmap.DpiX, bitmap.DpiY, PixelFormats.Rgb24, null);
                     outputBitmap.Lock();
                     Marshal.Copy(outputData, 0, outputBitmap.BackBuffer, length);
                     outputBitmap.AddDirtyRect(new Int32Rect(0, 0, width, height));
                     outputBitmap.Unlock();
 
-                    // Przypisz nową bitmapę jako wynik
                     imageAfter.Source = outputBitmap;
 
-                    // Zwalnianie zasobów
+                    // Wyświetl histogramy
+                    DisplayHistogram(pixelData, width, height, HistogramBefore);
+                    DisplayHistogram(outputData, width, height, HistogramAfter);
+
                     handleInput.Free();
                     handleOutput.Free();
                 }
@@ -120,6 +120,51 @@ namespace JAApp
                     filteredBitmap.Unlock();
                 }
             }
+        }
+
+        private void DisplayHistogram(byte[] pixelData, int width, int height, Canvas histogramCanvas)
+        {
+            int[] redHistogram = new int[256];
+            int[] greenHistogram = new int[256];
+            int[] blueHistogram = new int[256];
+
+            for (int i = 0; i < pixelData.Length; i += 3)
+            {
+                redHistogram[pixelData[i]]++;
+                greenHistogram[pixelData[i + 1]]++;
+                blueHistogram[pixelData[i + 2]]++;
+            }
+
+            int maxCount = new[] { redHistogram.Max(), greenHistogram.Max(), blueHistogram.Max() }.Max();
+
+            histogramCanvas.Children.Clear();
+            double scaleX = histogramCanvas.ActualWidth / 256.0;
+            double scaleY = histogramCanvas.ActualHeight / maxCount;
+
+            for (int i = 0; i < 256; i++)
+            {
+                // Red
+                DrawBar(histogramCanvas, i, redHistogram[i], scaleX, scaleY, Brushes.Red);
+
+                // Green
+                DrawBar(histogramCanvas, i, greenHistogram[i], scaleX, scaleY, Brushes.Green);
+
+                // Blue
+                DrawBar(histogramCanvas, i, blueHistogram[i], scaleX, scaleY, Brushes.Blue);
+            }
+        }
+
+        private void DrawBar(Canvas canvas, int x, int value, double scaleX, double scaleY, Brush color)
+        {
+            Rectangle rect = new Rectangle
+            {
+                Width = scaleX - 1,
+                Height = value * scaleY,
+                Fill = color
+            };
+            Canvas.SetLeft(rect, x * scaleX);
+            Canvas.SetTop(rect, canvas.ActualHeight - rect.Height);
+            canvas.Children.Add(rect);
         }
 
         private void Click(object sender, RoutedEventArgs e)
