@@ -16,8 +16,8 @@ PUBLIC alg
 ;   RDX = outputData     (bufor wyjœciowy)
 ;   R8  = width          (szerokoœæ)
 ;   R9  = startY         (pocz¹tek)
-;   [rsp+32]   = endY
-;   [rsp+40]   = imageHeight
+;   [rsp+104]   = endY
+;   [rsp+112]   = imageHeight
 ; ---------------------------------------------------------------------------------
 
 alg PROC
@@ -53,14 +53,14 @@ alg PROC
     ; ---------------------------------------------------------------------------------
 row_loop:
     cmp     r13d, r14d         ; Porównuje y (r13d) z endY (r14d)
-    jge     end_function       ; Jeœli y >= endY, zakoñcz funkcjê
+    jg     end_function       ; Jeœli y >= endY, zakoñcz funkcjê
 
     ; x = 0
     xor     r9d, r9d           ; r9d = x = 0
 
 col_loop:
     cmp     r9d, r12d          ; Porównuje x (r9d) z width (r12d)
-    jge     next_row           ; Jeœli x >= width, przejdŸ do nastêpnego wiersza
+    jg      next_row           ; Jeœli x >= width, przejdŸ do nastêpnego wiersza
 
     ;------------------------------------------------------------------------------
     ; Obliczenie offsetu: offset = ((y * width) + x) * 3
