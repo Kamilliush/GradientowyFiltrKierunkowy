@@ -38,10 +38,10 @@ alg PROC
     mov     r12d, r8d          ; r12d = width (szerokoœæ obrazu)
     mov     r13d, r9d          ; r13d = startY (pocz¹tek przetwarzania wierszy)
 
-    mov     eax, [rsp + 32]    ; eax = endY (koñcowy wiersz przetwarzania)
+    mov     eax, [rsp + 104]    ; eax = endY (koñcowy wiersz przetwarzania)
     mov     r14d, eax          ; r14d = endY
 
-    mov     eax, [rsp + 40]    ; eax = imageHeight (wysokoœæ obrazu)
+    mov     eax, [rsp + 112]    ; eax = imageHeight (wysokoœæ obrazu)
     mov     r15d, eax          ; r15d = imageHeight
 
     ; Jeœli bufor wyjœciowy == 0, wyjdŸ

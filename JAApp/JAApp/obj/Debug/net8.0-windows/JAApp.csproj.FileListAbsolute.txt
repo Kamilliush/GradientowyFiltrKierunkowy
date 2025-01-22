@@ -38,4 +38,3 @@ C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\JAApp\obj\Debug\ne
 C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\JAApp\obj\Debug\net8.0-windows\JAApp.pdb
 C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\JAApp\obj\Debug\net8.0-windows\JAApp.genruntimeconfig.cache
 C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\JAApp\obj\Debug\net8.0-windows\ref\JAApp.dll
-C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\JAApp\obj\Debug\net8.0-windows\JAApp_MarkupCompile.lref
