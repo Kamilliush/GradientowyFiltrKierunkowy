@@ -185,7 +185,7 @@
                             Click="CPP_Click"
                             Width="100"
                             Height="40"/>
-                            
+
                     <Button Content="ASM"
                             Click="ASM_Click"
                             Width="100"
@@ -204,6 +204,6 @@
                         Margin="10"/>
             </Grid>
         </Border>
-        
+
     </Grid>
 </Window>

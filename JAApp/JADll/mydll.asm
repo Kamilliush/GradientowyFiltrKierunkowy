@@ -9,7 +9,7 @@ PUBLIC alg
 .CODE
 
 ; ---------------------------------------------------------------------------------
-; void alg(IntPtr pixelData, IntPtr outputData, int width, int startY, int endY, int imageHeight)
+; alg(IntPtr pixelData, IntPtr outputData, int width, int startY, int endY, int imageHeight)
 ;
 ; Rejestry 64-bit:
 ;   RCX = pixelData      (wejœciowy bufor pikseli)

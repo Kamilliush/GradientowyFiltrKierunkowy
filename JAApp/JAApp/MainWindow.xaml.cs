@@ -25,6 +25,9 @@ namespace JAApp
         private BitmapSource bitmap;
         private WriteableBitmap outputBitmap; // Przechowujemy wynik przetwarzania
 
+        // Ścieżka do aktualnie wczytanego pliku. Służy do sprawdzenia, czy nie nadpisujemy oryginału.
+        private string loadedImagePath;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -230,6 +233,9 @@ namespace JAApp
 
                 image.Source = bitmap;
 
+                // Zapamiętujemy ścieżkę, aby nie pozwolić na jej nadpisanie
+                loadedImagePath = filePath;
+
                 // Zerujemy ostatni wynik i blokujemy przycisk "Zapisz"
                 imageAfter.Source = null;
                 saveButton.IsEnabled = false;
@@ -298,6 +304,18 @@ namespace JAApp
             if (saveFileDialog.ShowDialog() == true)
             {
                 string fileName = saveFileDialog.FileName;
+
+                // Sprawdzamy, czy nie próbujemy nadpisać oryginalnego pliku
+                if (!string.IsNullOrEmpty(loadedImagePath) &&
+                    string.Equals(fileName, loadedImagePath, StringComparison.OrdinalIgnoreCase))
+                {
+                    MessageBox.Show("Nie można nadpisać oryginalnego pliku!",
+                                    "Błąd zapisu",
+                                    MessageBoxButton.OK,
+                                    MessageBoxImage.Warning);
+                    return;
+                }
+
                 try
                 {
                     using (FileStream fs = new FileStream(fileName, FileMode.Create))
