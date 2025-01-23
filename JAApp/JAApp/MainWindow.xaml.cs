@@ -105,13 +105,7 @@ namespace JAApp
                     currentStartY = currentEndY + 1;
                 }
 
-                // Wyświetlamy informacje o segmentach
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < threadsNumber; i++)
-                {
-                    sb.AppendLine($"Segment {i}: startY = {startYs[i]}, endY = {endYs[i]}");
-                }
-                SegmentsTextBlock.Text = sb.ToString();
+               
 
                 // Mierzymy czas
                 Stopwatch stopwatch = Stopwatch.StartNew();

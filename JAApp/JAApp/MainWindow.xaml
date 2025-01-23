@@ -66,16 +66,6 @@
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
 
-        <!-- Panel z listą segmentów (prawy dolny) -->
-        <ScrollViewer Grid.Column="1" Grid.Row="5"
-                      VerticalScrollBarVisibility="Auto"
-                      HorizontalScrollBarVisibility="Disabled">
-            <TextBlock x:Name="SegmentsTextBlock"
-                       TextWrapping="Wrap"
-                       Margin="10"
-                       Foreground="Blue" />
-        </ScrollViewer>
-
         <!-- Tekst z czasem wykonania (prawy dolny) -->
         <TextBlock x:Name="ExecutionTimeTextBlock"
                    TextWrapping="Wrap"
