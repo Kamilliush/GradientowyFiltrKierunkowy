@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;   // Dla OpenFileDialog i SaveFileDialog
+﻿using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -23,17 +23,13 @@ namespace JAApp
         public static extern void Add(IntPtr pixelData, IntPtr outputData, int width, int startY, int endY, int imageHeight);
 
         private BitmapSource bitmap;
-        private WriteableBitmap outputBitmap; // Przechowujemy wynik przetwarzania
-
-        // Ścieżka do aktualnie wczytanego pliku. Służy do sprawdzenia, czy nie nadpisujemy oryginału.
+        private WriteableBitmap outputBitmap;
         private string loadedImagePath;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            // Ustawiamy domyślną wartość suwaka na liczbę logicznych wątków w procesorze,
-            // ale ograniczamy do 128, aby nie przekraczać maksimum zdefiniowanego w XAML.
             int processorCount = Environment.ProcessorCount;
             threadsSlider.Value = Math.Min(processorCount, 128);
         }
@@ -58,12 +54,11 @@ namespace JAApp
         /// Główna metoda wykonująca algorytm. 
         /// Parametr useCpp decyduje, czy wywołujemy funkcję Add (CPP) czy alg (ASM).
         /// </summary>
-        /// <param name="useCpp"></param>
         private void ProcessImage(bool useCpp)
         {
             int height = bitmap.PixelHeight;
             int width = bitmap.PixelWidth;
-            int bytesPerPixel = 3;
+            int bytesPerPixel = 3; // bo konwertujemy do Rgb24
 
             // Pobranie liczby wątków z suwaka
             int threadsNumber = (int)threadsSlider.Value;
@@ -74,19 +69,41 @@ namespace JAApp
 
             try
             {
-                int length = width * height * bytesPerPixel;
-                byte[] pixelData = new byte[length];
-                byte[] outputData = new byte[length];
+                // 1) Tworzymy bufor tak duży jak cała pamięć obrazu (z paddingiem)
+                int stride = filteredBitmap.BackBufferStride;
+                int bufferSize = stride * height;
+                byte[] readData = new byte[bufferSize];
 
-                IntPtr pBackBuffer = filteredBitmap.BackBuffer;
-                Marshal.Copy(pBackBuffer, pixelData, 0, length);
+                // 2) Kopiujemy z back‐buffera do readData
+                Marshal.Copy(filteredBitmap.BackBuffer, readData, 0, bufferSize);
 
+                // 3) Spłaszczamy dane do tablicy "pixelData" (width*height*3)
+                //    tu nie ma już wierszowego paddingu – piksele idą ciągiem
+                int flatSize = width * height * bytesPerPixel;
+                byte[] pixelData = new byte[flatSize];
+                byte[] outputData = new byte[flatSize];
+
+                // Przepisujemy każdy wiersz z readData do pixelData
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        int sourceIndex = y * stride + x * bytesPerPixel; // indeks w readData
+                        int destIndex = (y * width + x) * bytesPerPixel;  // indeks w spłaszczonej tablicy
+
+                        pixelData[destIndex + 0] = readData[sourceIndex + 0];
+                        pixelData[destIndex + 1] = readData[sourceIndex + 1];
+                        pixelData[destIndex + 2] = readData[sourceIndex + 2];
+                    }
+                }
+
+                // 4) Spinamy tablice z kodem niezarządzanym
                 GCHandle handleInput = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
                 GCHandle handleOutput = GCHandle.Alloc(outputData, GCHandleType.Pinned);
-                IntPtr pixelDataPtr = Marshal.UnsafeAddrOfPinnedArrayElement(pixelData, 0);
-                IntPtr outputDataPtr = Marshal.UnsafeAddrOfPinnedArrayElement(outputData, 0);
+                IntPtr pixelDataPtr = handleInput.AddrOfPinnedObject();
+                IntPtr outputDataPtr = handleOutput.AddrOfPinnedObject();
 
-                // Podział na segmenty
+                // Podział na segmenty do wątków
                 int baseSegmentHeight = height / threadsNumber;
                 int extraRows = height % threadsNumber;
 
@@ -101,11 +118,8 @@ namespace JAApp
 
                     startYs[i] = currentStartY;
                     endYs[i] = currentEndY;
-
                     currentStartY = currentEndY + 1;
                 }
-
-               
 
                 // Mierzymy czas
                 Stopwatch stopwatch = Stopwatch.StartNew();
@@ -126,28 +140,43 @@ namespace JAApp
                 double elapsedSeconds = stopwatch.Elapsed.TotalSeconds;
                 ExecutionTimeTextBlock.Text = $"Czas: {elapsedSeconds:F6} s";
 
-                // Przygotowujemy wynik do wyświetlenia
-                outputBitmap = new WriteableBitmap(width, height, bitmap.DpiX, bitmap.DpiY, PixelFormats.Rgb24, null);
-                outputBitmap.Lock();
-                Marshal.Copy(outputData, 0, outputBitmap.BackBuffer, length);
-                outputBitmap.AddDirtyRect(new Int32Rect(0, 0, width, height));
-                outputBitmap.Unlock();
+                // 5) Zapisujemy wynik z outputData z powrotem do readData (uwzględniając stride)
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < width; x++)
+                    {
+                        int destIndex = y * stride + x * bytesPerPixel; // indeks w readData
+                        int sourceIndex = (y * width + x) * bytesPerPixel; // indeks w outputData
 
-                imageAfter.Source = outputBitmap;
+                        readData[destIndex + 0] = outputData[sourceIndex + 0];
+                        readData[destIndex + 1] = outputData[sourceIndex + 1];
+                        readData[destIndex + 2] = outputData[sourceIndex + 2];
+                    }
+                }
 
-                // Wyświetlamy histogramy
+                // 6) Kopiujemy readData z powrotem do back‐buffera
+                Marshal.Copy(readData, 0, filteredBitmap.BackBuffer, bufferSize);
+
+                // Ustawiamy dirtyRect i kończymy
+                filteredBitmap.AddDirtyRect(new Int32Rect(0, 0, width, height));
+                filteredBitmap.Unlock();
+                imageAfter.Source = filteredBitmap;
+                outputBitmap = filteredBitmap; // zapamiętujemy wynik do ewentualnego zapisu
+
+                // Wyświetlamy histogramy (zrobimy na bazie spłaszczonej tablicy outputData)
                 DisplayHistogram(pixelData, width, height, HistogramBefore);
                 DisplayHistogram(outputData, width, height, HistogramAfter);
 
                 handleInput.Free();
                 handleOutput.Free();
 
-                // Uaktywniamy przycisk "Zapisz", bo mamy już wynik
+                // Uaktywniamy przycisk "Zapisz"
                 saveButton.IsEnabled = true;
             }
-            finally
+            catch (Exception ex)
             {
                 filteredBitmap.Unlock();
+                MessageBox.Show($"Błąd podczas przetwarzania obrazu: {ex.Message}");
             }
         }
 
@@ -174,10 +203,8 @@ namespace JAApp
             {
                 // Red
                 DrawBar(histogramCanvas, i, redHistogram[i], scaleX, scaleY, Brushes.Red);
-
                 // Green
                 DrawBar(histogramCanvas, i, greenHistogram[i], scaleX, scaleY, Brushes.Green);
-
                 // Blue
                 DrawBar(histogramCanvas, i, blueHistogram[i], scaleX, scaleY, Brushes.Blue);
             }
@@ -196,9 +223,6 @@ namespace JAApp
             canvas.Children.Add(rect);
         }
 
-        /// <summary>
-        /// Obsługa przycisku "Wybierz zdjęcie" - otwieramy okno dialogowe z filtrem plików graficznych.
-        /// </summary>
         private void WybierzZdjecie_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -212,10 +236,6 @@ namespace JAApp
             }
         }
 
-        /// <summary>
-        /// Ustawia wybrany plik jako główne źródło obrazu (po konwersji do Rgb24).
-        /// </summary>
-        /// <param name="filePath"></param>
         private void SetImage(string filePath)
         {
             try
@@ -226,16 +246,12 @@ namespace JAApp
                 bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapImage.EndInit();
 
-                // Konwersja do Rgb24
                 FormatConvertedBitmap rgbBitmap = new FormatConvertedBitmap(bitmapImage, PixelFormats.Rgb24, null, 0);
                 bitmap = rgbBitmap;
 
                 image.Source = bitmap;
-
-                // Zapamiętujemy ścieżkę, aby nie pozwolić na jej nadpisanie
                 loadedImagePath = filePath;
 
-                // Zerujemy ostatni wynik i blokujemy przycisk "Zapisz"
                 imageAfter.Source = null;
                 saveButton.IsEnabled = false;
             }
@@ -287,9 +303,6 @@ namespace JAApp
             }
         }
 
-        /// <summary>
-        /// Obsługa przycisku "Zapisz" - zapisuje przetworzony obraz do wybranego pliku.
-        /// </summary>
         private void Zapisz_Click(object sender, RoutedEventArgs e)
         {
             if (outputBitmap == null)
@@ -304,7 +317,6 @@ namespace JAApp
             {
                 string fileName = saveFileDialog.FileName;
 
-                // Sprawdzamy, czy nie próbujemy nadpisać oryginalnego pliku
                 if (!string.IsNullOrEmpty(loadedImagePath) &&
                     string.Equals(fileName, loadedImagePath, StringComparison.OrdinalIgnoreCase))
                 {

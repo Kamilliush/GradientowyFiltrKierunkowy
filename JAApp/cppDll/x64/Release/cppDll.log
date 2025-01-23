@@ -1,9 +1,11 @@
 ﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8004: Katalog Output nie kończy się ukośnikiem. To wystąpienie kompilacji doda ukośnik, ponieważ jest on niezbędny, aby możliwa była poprawna ocena katalogu Output.
+  gradient.cpp
      Trwa tworzenie biblioteki C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\JAApp\bin\Release\net8.0-windows\cppDll.lib i obiektu C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\JAApp\bin\Release\net8.0-windows\cppDll.exp
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
 cppDll.exp : warning LNK4070: /OUT: dyrektywa JAAsm.dll w pliku .EXP jest inna niż nazwa pliku wyjściowego „C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\JAApp\bin\Release\net8.0-windows\cppDll.dll”; dyrektywa została zignorowana
   Trwa generowanie kodu
-  All 7 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  3 of 7 functions (42.9%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Zakończono generowanie kodu
 cppDll.exp : warning LNK4070: /OUT: dyrektywa JAAsm.dll w pliku .EXP jest inna niż nazwa pliku wyjściowego „C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\JAApp\bin\Release\net8.0-windows\cppDll.dll”; dyrektywa została zignorowana
   cppDll.vcxproj -> C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\JAApp\bin\Release\net8.0-windows\cppDll.dll
