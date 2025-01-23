@@ -16,10 +16,10 @@ namespace JAApp
 {
     public partial class MainWindow : Window
     {
-        [DllImport("/../../../../bin/JADll.dll", CallingConvention = CallingConvention.StdCall)]
+        [DllImport("JADll.dll", CallingConvention = CallingConvention.StdCall)]
         public static extern void alg(IntPtr pixelData, IntPtr outputData, int width, int startY, int endY, int imageHeight);
 
-        [DllImport("/../../../../bin/cppDll.dll", CallingConvention = CallingConvention.StdCall)]
+        [DllImport("cppDll.dll", CallingConvention = CallingConvention.StdCall)]
         public static extern void Add(IntPtr pixelData, IntPtr outputData, int width, int startY, int endY, int imageHeight);
 
         private BitmapSource bitmap;
@@ -31,6 +31,11 @@ namespace JAApp
         public MainWindow()
         {
             InitializeComponent();
+
+            // Ustawiamy domyślną wartość suwaka na liczbę logicznych wątków w procesorze,
+            // ale ograniczamy do 128, aby nie przekraczać maksimum zdefiniowanego w XAML.
+            int processorCount = Environment.ProcessorCount;
+            threadsSlider.Value = Math.Min(processorCount, 128);
         }
 
         private void CPP_Click(object sender, RoutedEventArgs e)

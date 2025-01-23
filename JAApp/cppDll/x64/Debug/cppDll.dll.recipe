@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\bin\cppDll.dll</FullPath>
+      <FullPath>C:\Users\kjaku\Desktop\S5\JA\GradientowyFiltrKierunkowy\JAApp\JAApp\bin\Debug\net8.0-windows\cppDll.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
