@@ -172,6 +172,8 @@ namespace JAApp
 
                 // Uaktywniamy przycisk "Zapisz"
                 saveButton.IsEnabled = true;
+                MessageBox.Show("Pomyślnie wykonano algorytm");
+
             }
             catch (Exception ex)
             {
@@ -349,6 +351,8 @@ namespace JAApp
                         encoder.Frames.Add(BitmapFrame.Create(outputBitmap));
                         encoder.Save(fs);
                     }
+                    MessageBox.Show("Pomyślnie zapisano obraz");
+
                 }
                 catch (Exception ex)
                 {
